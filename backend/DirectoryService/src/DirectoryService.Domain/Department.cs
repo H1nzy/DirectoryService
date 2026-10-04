@@ -27,7 +27,8 @@ public class Department
     }
     public static Department Create(string name, DepartmentSlug slug, Guid? parentId, string? parentPath)
     {
-    if (string.IsNullOrWhiteSpace(name)) {
+if (parentId != null && string.IsNullOrWhiteSpace(parentPath))
+    throw new ArgumentException("Путь родительского подразделения обязателен", nameof(parentPath));
         throw new ArgumentException("Имя не может быть пустым", nameof(name));
     }
 
