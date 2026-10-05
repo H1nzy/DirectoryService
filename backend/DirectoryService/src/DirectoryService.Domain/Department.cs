@@ -27,10 +27,15 @@ public class Department
     }
     public static Department Create(string name, DepartmentSlug slug, Guid? parentId, string? parentPath)
     {
-if (parentId != null && string.IsNullOrWhiteSpace(parentPath))
-    throw new ArgumentException("Путь родительского подразделения обязателен", nameof(parentPath));
-        throw new ArgumentException("Имя не может быть пустым", nameof(name));
-    }
+        if (parentId != null && string.IsNullOrWhiteSpace(parentPath))
+        {
+            throw new ArgumentException("Путь родительского подразделения обязателен", nameof(parentPath));
+        }
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Имя не может быть пустым", nameof(name));
+        }
+    
 
     string finalPath;
 
@@ -47,5 +52,6 @@ if (parentId != null && string.IsNullOrWhiteSpace(parentPath))
 
     return newDepartment;
     }
+    
 
 }
