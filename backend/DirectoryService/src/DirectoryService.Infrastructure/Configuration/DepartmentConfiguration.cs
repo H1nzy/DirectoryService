@@ -11,7 +11,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.Property(d => d.Path).IsRequired().HasMaxLength(500).HasColumnName("path");
         builder.Property(d => d.CreatedAt).IsRequired().HasColumnType("timestamp with time zone").HasColumnName("created_at");
         builder.Property(d => d.UpdatedAt).IsRequired().HasColumnType("timestamp with time zone").HasColumnName("updated_at");
-        builder.HasOne<Department>().WithMany().HasForeignKey(d => d.ParentId).IsRequired(false);
+builder.Property(d => d.Slug).IsRequired().HasMaxLength(DepartmentSlug.MaxLength).HasConversion(d => d.Value, value => DepartmentSlug.Create(value)).HasColumnName("slug");
         builder.Property(d => d.Slug).IsRequired().HasMaxLength(DepartmentSlug.MaxLength).HasConversion(d => d.Value, value => DepartmentSlug.Create(value));
     }
 }
