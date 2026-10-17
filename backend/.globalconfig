@@ -43,6 +43,7 @@ dotnet_diagnostic.CA1308.severity = none
 # Отключаем правило CA1861 глобально для всех проектов решения
 dotnet_diagnostic.CA1861.severity = none
 
+dotnet_diagnostic.CA1515.severity = none
 
 
 # Правила строже, чем по умолчанию:
