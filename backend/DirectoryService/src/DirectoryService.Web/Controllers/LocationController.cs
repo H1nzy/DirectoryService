@@ -1,6 +1,7 @@
 using DirectoryService.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DirectoryService.Application;
 
 namespace DirectoryService.Web;
 
@@ -8,10 +9,18 @@ namespace DirectoryService.Web;
 [Route("locations")]
 public class LocationController : ControllerBase
 {
+    private readonly CreateLocationUseCase _createLocationUseCase;
+    
+    public LocationController(CreateLocationUseCase createLocationUseCase)
+    {
+        _createLocationUseCase = createLocationUseCase;
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateLocationDto createLocationDto)
     {
-        return Ok(Guid.NewGuid());
+        Guid id = await _createLocationUseCase.Create(createLocationDto);
+        return Ok(id);
     }
 
     [HttpGet("{id:guid}")]
