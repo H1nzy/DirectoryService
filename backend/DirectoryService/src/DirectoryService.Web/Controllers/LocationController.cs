@@ -17,9 +17,9 @@ public class LocationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateLocationDto createLocationDto)
+    public async Task<IActionResult> Create([FromBody] CreateLocationDto createLocationDto, CancellationToken ct)
     {
-        Guid id = await _createLocationUseCase.Create(createLocationDto);
+        Guid id = await _createLocationUseCase.Create(createLocationDto, ct);
         return Ok(id);
     }
 

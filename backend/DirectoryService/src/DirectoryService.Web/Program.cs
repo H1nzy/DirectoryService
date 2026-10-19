@@ -2,6 +2,8 @@ using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DirectoryService.Infrastructure;
 using DirectoryService.Application;
+using System.Data;
+using Npgsql;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -13,13 +15,14 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<CreateLocationUseCase>();
 builder.Services.AddScoped<CreateLocationValidator>();
 
-string repositoryType = "EF";
+string repositoryType = "Dapper";
 if (repositoryType == "EF")
 {
     builder.Services.AddScoped<ILocationRepository, EFLocationsRepository>();
 }
 else if (repositoryType == "Dapper")
 {
+    builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
     builder.Services.AddScoped<ILocationRepository, DapperLocationRepository>();
 }
 
