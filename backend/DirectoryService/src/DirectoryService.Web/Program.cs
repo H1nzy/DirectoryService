@@ -1,6 +1,7 @@
 using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DirectoryService.Infrastructure;
+using DirectoryService.Application;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -9,6 +10,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<CreateLocationUseCase>();
+builder.Services.AddScoped<CreateLocationValidator>();
+
+string repositoryType = "EF";
+if (repositoryType == "EF")
+{
+    builder.Services.AddScoped<ILocationRepository, EFLocationsRepository>();
+}
+else if (repositoryType == "Dapper")
+{
+    builder.Services.AddScoped<ILocationRepository, DapperLocationRepository>();
+}
+
 
 WebApplication app = builder.Build();
 
