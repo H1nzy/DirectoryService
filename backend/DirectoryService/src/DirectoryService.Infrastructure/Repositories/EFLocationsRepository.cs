@@ -30,6 +30,6 @@ public class EFLocationsRepository : ILocationRepository
 
     public async Task<bool> CheckName(string name)
     {
-        return await _dbContext.Locations.AnyAsync(x => x.Name == name);
+public async Task<bool> CheckName(string name, CancellationToken ct = default)
     }
 }
