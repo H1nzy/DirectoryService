@@ -30,7 +30,7 @@ public class DapperLocationRepository : ILocationRepository
             throw new InvalidOperationException($"Не удалось выполнить SQL-команду вставки для локации '{location.Name}' через Dapper.", ex);
         }
         return location.Id;
-    }
+public async Task<bool> CheckName(string name, CancellationToken ct = default)
 
     public async Task<bool> CheckName(string name)
     {
