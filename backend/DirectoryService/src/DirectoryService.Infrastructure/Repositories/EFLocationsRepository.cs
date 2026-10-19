@@ -11,7 +11,7 @@ public class EFLocationsRepository : ILocationRepository
     public EFLocationsRepository(AppDbContext appDbContext, ILogger<EFLocationsRepository> logger)
     {
         _dbContext = appDbContext;
-        _logger = logger;
+public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
     }
     public async Task<Guid> AddAsync(Location location)
     {
