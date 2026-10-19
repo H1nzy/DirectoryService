@@ -14,7 +14,7 @@ public class DapperLocationRepository : ILocationRepository
         _connection = connection;
         _logger = logger;
     }
-
+public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
     public async Task<Guid> AddAsync(Location location)
     {
         const string sql = @"
