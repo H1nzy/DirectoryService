@@ -27,9 +27,7 @@ public class EFLocationsRepository : ILocationRepository
         }
         return location.Id;
     }
-
-    
-public async Task<bool> CheckName(string name, CancellationToken ct = default)
+    public async Task<bool> CheckName(string name, CancellationToken ct = default)
     {
         return await _dbContext.Locations.AnyAsync(x => x.Name == name, ct);
     }

@@ -8,22 +8,28 @@ using Npgsql;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options
+    .UseNpgsql(connectionString)
+    .UseSnakeCaseNamingConvention());
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<CreateLocationUseCase>();
 builder.Services.AddScoped<CreateLocationValidator>();
+builder.Services.AddScoped<CreateDepartmentUseCase>();
+builder.Services.AddScoped<CreateDepartmentValidator>();
 
-string repositoryType = "Dapper";
+string repositoryType = "EF";
 if (repositoryType == "EF")
 {
     builder.Services.AddScoped<ILocationRepository, EFLocationsRepository>();
+    builder.Services.AddScoped<IDepartmentRepository, EFDepartmentsRepository>();
 }
 else if (repositoryType == "Dapper")
 {
     builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
     builder.Services.AddScoped<ILocationRepository, DapperLocationRepository>();
+    builder.Services.AddScoped<IDepartmentRepository, DapperDepartmentRepository>();
 }
 
 

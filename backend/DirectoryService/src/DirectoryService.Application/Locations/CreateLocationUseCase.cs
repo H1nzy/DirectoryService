@@ -1,5 +1,4 @@
 using DirectoryService.Contracts;
-using DirectoryService.Domain;
 using FluentValidation;
 namespace DirectoryService.Application;
  public class CreateLocationUseCase
