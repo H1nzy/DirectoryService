@@ -12,7 +12,7 @@ public class CreateDepartmentUseCase
     {
         _departmentrepository = departmentRepository;
         _departmentvalidator = departmentvalidator;
-    }
+public async Task<Department> CreateAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
 
     public async Task<Department> GetByIdAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
     {
