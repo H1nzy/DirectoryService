@@ -14,15 +14,15 @@ public class DapperLocationRepository : ILocationRepository
         _connection = connection;
         _logger = logger;
     }
-public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
-    public async Task<Guid> AddAsync(Location location)
+    public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
     {
         const string sql = @"
         INSERT INTO locations (id, name, address, created_at, updated_at) 
         VALUES (@Id, @Name, @Address, @CreatedAt, @UpdatedAt);";
         try
         {
-            await _connection.ExecuteAsync(sql, location);
+            var command = new CommandDefinition(sql, location, cancellationToken: ct);
+            await _connection.ExecuteAsync(command);
         }
         catch(Exception ex)
         {
@@ -30,12 +30,12 @@ public async Task<Guid> AddAsync(Location location, CancellationToken ct = defau
             throw new InvalidOperationException($"Не удалось выполнить SQL-команду вставки для локации '{location.Name}' через Dapper.", ex);
         }
         return location.Id;
-public async Task<bool> CheckName(string name, CancellationToken ct = default)
+    }
 
-    public async Task<bool> CheckName(string name)
+    public async Task<bool> CheckName(string name, CancellationToken ct = default)
     {
         const string sql = "SELECT EXISTS(SELECT 1 FROM locations WHERE name = @Name);";
-        
-        return await _connection.QueryFirstOrDefaultAsync<bool>(sql, new { Name = name });
+        var command = new CommandDefinition(sql, new {Name = name}, cancellationToken: ct);
+        return await _connection.QueryFirstOrDefaultAsync<bool>(command);
     }
 }

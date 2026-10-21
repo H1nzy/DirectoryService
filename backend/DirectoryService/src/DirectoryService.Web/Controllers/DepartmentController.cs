@@ -1,6 +1,7 @@
 using DirectoryService.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DirectoryService.Application;
 
 namespace DirectoryService.Web;
 
@@ -9,11 +10,19 @@ namespace DirectoryService.Web;
 
 public class DepartmentController : ControllerBase
 {
+    private readonly CreateDepartmentUseCase _createDepartmentUseCase;
+    
+    public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase)
+    {
+        _createDepartmentUseCase = createDepartmentUseCase;
+    }
     [HttpPost]
 
-    public async Task<IActionResult> Create([FromBody] CreateDepartmentDto createDepartmentDto)
+    public async Task<IActionResult> Create([FromBody] CreateDepartmentDto createDepartmentDto, CancellationToken ct)
     {
-        return Ok(Guid.NewGuid());
+        var department = await _createDepartmentUseCase.GetByIdAsync(createDepartmentDto, ct);
+        Guid id = department.Id;
+        return Ok(id);
     }
 
     [HttpGet("{id:guid}")]

@@ -6,6 +6,7 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
 {
     public void Configure(EntityTypeBuilder<DepartmentPosition> builder)
     {
+        builder.ToTable("departments_positions");
         builder.HasKey(dp => dp.Id);
         builder.HasOne<Department>().WithMany().HasForeignKey(dp => dp.DepartmentId).IsRequired();
         builder.HasOne<Position>().WithMany().HasForeignKey(dp => dp.PositionId).IsRequired();

@@ -26,7 +26,8 @@ namespace DirectoryService.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -39,7 +40,8 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnName("name");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("parent_id");
 
                     b.Property<string>("Path")
                         .IsRequired()
@@ -50,73 +52,87 @@ namespace DirectoryService.Infrastructure.Migrations
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("slug");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_departments");
 
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Departments");
+                    b.ToTable("departments", (string)null);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentLocation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_id");
 
                     b.Property<bool>("IsPrimary")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_primary");
 
                     b.Property<Guid>("LocationId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("location_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_departments_locations");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationId")
+                        .HasDatabaseName("ix_departments_locations_location_id");
 
                     b.HasIndex("DepartmentId", "LocationId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_departments_locations_department_id_location_id");
 
-                    b.ToTable("DepartmentLocations");
+                    b.ToTable("departments_locations", (string)null);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentPosition", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_id");
 
                     b.Property<Guid>("PositionId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("position_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_departments_positions");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("PositionId")
+                        .HasDatabaseName("ix_departments_positions_position_id");
 
                     b.HasIndex("DepartmentId", "PositionId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_departments_positions_department_id_position_id");
 
-                    b.ToTable("DepartmentPositions");
+                    b.ToTable("departments_positions", (string)null);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -138,16 +154,18 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_locations");
 
-                    b.ToTable("Locations");
+                    b.ToTable("locations", (string)null);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.Position", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -163,16 +181,10 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_positions");
 
                     b.ToTable("positions", (string)null);
-                });
-
-            modelBuilder.Entity("DirectoryService.Domain.Department", b =>
-                {
-                    b.HasOne("DirectoryService.Domain.Department", null)
-                        .WithMany()
-                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentLocation", b =>
@@ -181,13 +193,15 @@ namespace DirectoryService.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_departments_locations_departments_department_id");
 
                     b.HasOne("DirectoryService.Domain.Location", null)
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_departments_locations_locations_location_id");
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.DepartmentPosition", b =>
@@ -196,13 +210,15 @@ namespace DirectoryService.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_departments_positions_departments_department_id");
 
                     b.HasOne("DirectoryService.Domain.Position", null)
                         .WithMany()
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_departments_positions_positions_position_id");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,14 +11,14 @@ public class EFLocationsRepository : ILocationRepository
     public EFLocationsRepository(AppDbContext appDbContext, ILogger<EFLocationsRepository> logger)
     {
         _dbContext = appDbContext;
-public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
+        _logger = logger;
     }
-    public async Task<Guid> AddAsync(Location location)
+    public async Task<Guid> AddAsync(Location location, CancellationToken ct = default)
     {
-        await _dbContext.Locations.AddAsync(location);
+        await _dbContext.Locations.AddAsync(location,ct);
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(ct);
         }
         catch(Exception ex)
         {
@@ -27,9 +27,8 @@ public async Task<Guid> AddAsync(Location location, CancellationToken ct = defau
         }
         return location.Id;
     }
-
-    public async Task<bool> CheckName(string name)
+    public async Task<bool> CheckName(string name, CancellationToken ct = default)
     {
-public async Task<bool> CheckName(string name, CancellationToken ct = default)
+        return await _dbContext.Locations.AnyAsync(x => x.Name == name, ct);
     }
 }
