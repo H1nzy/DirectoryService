@@ -14,7 +14,7 @@ public class CreateDepartmentUseCase
         _departmentvalidator = departmentvalidator;
     }
 
-    public async Task<Department> Create(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
+    public async Task<Department> CreateAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
     {
         var validator = await _departmentvalidator.ValidateAsync(createDepartmentDto, ct);
         if (!validator.IsValid)
