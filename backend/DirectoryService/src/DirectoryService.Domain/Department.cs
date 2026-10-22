@@ -53,24 +53,11 @@ public class Department
             throw new ArgumentException("Имя не может быть пустым", nameof(name));
         }
 
-        string finalPath;
+         string finalPath = parentId == null 
+            ? slug.Value 
+            : $"{parentPath}/{slug.Value}";
 
-        if (parentId == null) 
-        {
-            finalPath = slug.Value; 
-        }
-        else 
-        {
-            finalPath = $"{parentPath}/{slug.Value}";
-        }
 
-        Department newDepartment = new Department(name, slug, parentId, finalPath);
-
-        return newDepartment;
-    }
-    
-    public static Department Restore(Guid id, string name, DepartmentSlug slug, string path, Guid? parentId, DateTime createdAt, DateTime updatedAt)
-    {
-        return new Department(id, name, slug, path, parentId, createdAt, updatedAt);
+        return new Department(name, slug, parentId, finalPath);
     }
 }

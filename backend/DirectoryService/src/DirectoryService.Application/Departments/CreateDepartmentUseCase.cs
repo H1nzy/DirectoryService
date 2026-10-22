@@ -12,9 +12,9 @@ public class CreateDepartmentUseCase
     {
         _departmentrepository = departmentRepository;
         _departmentvalidator = departmentvalidator;
-public async Task<Department> CreateAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
+    }
 
-    public async Task<Department> GetByIdAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
+    public async Task<Department> CreateAsync(CreateDepartmentDto createDepartmentDto, CancellationToken ct = default)
     {
         var validator = await _departmentvalidator.ValidateAsync(createDepartmentDto, ct);
         if (!validator.IsValid)
@@ -38,7 +38,7 @@ public async Task<Department> CreateAsync(CreateDepartmentDto createDepartmentDt
 
         if (createDepartmentDto.LocationIds != null && createDepartmentDto.LocationIds.Count > 0)
         {
-            bool allExist = await _departmentrepository.Check(createDepartmentDto.LocationIds, ct);
+            bool allExist = await _departmentrepository.AllLocationsExistAsync(createDepartmentDto.LocationIds, ct);
             if (!allExist)
             {
                 throw new InvalidOperationException("Одна или несколько указанных локаций не существуют в системе.");

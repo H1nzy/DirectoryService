@@ -20,7 +20,7 @@ public class DepartmentController : ControllerBase
 
     public async Task<IActionResult> Create([FromBody] CreateDepartmentDto createDepartmentDto, CancellationToken ct)
     {
-        var department = await _createDepartmentUseCase.GetByIdAsync(createDepartmentDto, ct);
+        var department = await _createDepartmentUseCase.CreateAsync(createDepartmentDto, ct);
         Guid id = department.Id;
         return Ok(id);
     }

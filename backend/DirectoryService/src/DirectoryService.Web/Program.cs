@@ -4,6 +4,7 @@ using DirectoryService.Infrastructure;
 using DirectoryService.Application;
 using System.Data;
 using Npgsql;
+using Dapper;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -27,6 +28,8 @@ if (repositoryType == "EF")
 }
 else if (repositoryType == "Dapper")
 {
+     SqlMapper.AddTypeHandler(new DepartmentSlugTypeHandler());
+
     builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
     builder.Services.AddScoped<ILocationRepository, DapperLocationRepository>();
     builder.Services.AddScoped<IDepartmentRepository, DapperDepartmentRepository>();

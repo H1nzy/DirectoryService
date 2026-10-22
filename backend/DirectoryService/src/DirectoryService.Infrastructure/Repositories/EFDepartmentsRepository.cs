@@ -20,7 +20,7 @@ public class EFDepartmentsRepository : IDepartmentRepository
         return await _dbContext.Departments.FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
-    public async Task<bool> Check(IReadOnlyCollection<Guid> locationIds, CancellationToken ct = default)
+    public async Task<bool> AllLocationsExistAsync(IReadOnlyCollection<Guid> locationIds, CancellationToken ct = default)
     {
           int result = await _dbContext.Locations
         .Where(l => locationIds.Contains(l.Id))
