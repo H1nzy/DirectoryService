@@ -1,6 +1,5 @@
 using DirectoryService.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using DirectoryService.Application;
 
 namespace DirectoryService.Web;
@@ -10,10 +9,12 @@ namespace DirectoryService.Web;
 public class LocationController : ControllerBase
 {
     private readonly CreateLocationUseCase _createLocationUseCase;
+    private readonly UpdateLocationUseCase _updateLocationUseCase;
     
-    public LocationController(CreateLocationUseCase createLocationUseCase)
+    public LocationController(CreateLocationUseCase createLocationUseCase, UpdateLocationUseCase updateLocationUseCase)
     {
         _createLocationUseCase = createLocationUseCase;
+        _updateLocationUseCase = updateLocationUseCase;
     }
 
     [HttpPost]
@@ -35,10 +36,11 @@ public class LocationController : ControllerBase
         return Ok(Array.Empty<object>());
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody]UpdateLocationDto updateLocationDto)
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody]UpdateLocationDto updateLocationDto, CancellationToken ct)
     {
-        return NoContent();
+         await _updateLocationUseCase.Handle(id, updateLocationDto, ct);
+        return Ok(id);
     }
 
     [HttpDelete("{id:guid}")]

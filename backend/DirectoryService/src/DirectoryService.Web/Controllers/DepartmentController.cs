@@ -1,6 +1,5 @@
 using DirectoryService.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using DirectoryService.Application;
 
 namespace DirectoryService.Web;
@@ -11,10 +10,13 @@ namespace DirectoryService.Web;
 public class DepartmentController : ControllerBase
 {
     private readonly CreateDepartmentUseCase _createDepartmentUseCase;
+    private readonly UpdateDepartmentUseCase _updateDepartmentUseCase;
     
-    public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase)
+    public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase, UpdateDepartmentUseCase updateDepartmentUseCase)
     {
         _createDepartmentUseCase = createDepartmentUseCase;
+        _updateDepartmentUseCase = updateDepartmentUseCase;
+
     }
     [HttpPost]
 
@@ -37,10 +39,11 @@ public class DepartmentController : ControllerBase
         return Ok(Array.Empty<object>());
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateDepartmentDto updateDepartmentDto)
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateDepartmentDto updateDepartmentDto, CancellationToken ct)
     {
-        return NoContent();
+        await _updateDepartmentUseCase.Handle(id, updateDepartmentDto, ct);
+        return Ok(id);
     }
 
     [HttpDelete("{id:guid}")]

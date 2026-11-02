@@ -1,3 +1,4 @@
+using System.Collections;
 using DirectoryService.Application;
 using DirectoryService.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -48,5 +49,17 @@ public class EFDepartmentsRepository : IDepartmentRepository
         }
     }
 
-
+    public async Task<Guid> UpdateAsync(Department department, CancellationToken ct = default)
+    {
+        try
+        {
+            await _dbContext.SaveChangesAsync(ct);
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка при сохранении подразделения {DepartmentId} через EF Core", department.Id);
+            throw new InvalidOperationException($"Не удалось сохранить подразделение '{department.Name}' в базе данных через EF Core.", ex);
+        }
+        return department.Id;
+    }
 }

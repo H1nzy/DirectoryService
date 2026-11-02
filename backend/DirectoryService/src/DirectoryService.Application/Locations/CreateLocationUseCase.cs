@@ -24,7 +24,7 @@ namespace DirectoryService.Application;
             throw new InvalidOperationException($"Location with name '{createLocationDto.Name}' already exists.");
         }
 
-        var  location = DirectoryService.Domain.Location.Create(createLocationDto.Name, createLocationDto.Address.City + ", " + createLocationDto.Address.Street + ", " + createLocationDto.Address.House + (createLocationDto.Address.Apartment != null ? ", " + createLocationDto.Address.Apartment : ""));
+        var  location = DirectoryService.Domain.Location.Create(createLocationDto.Name, createLocationDto.Address.ToDisplayString());
         await _locationRepository.AddAsync(location, ct);
         return location.Id;
     }
