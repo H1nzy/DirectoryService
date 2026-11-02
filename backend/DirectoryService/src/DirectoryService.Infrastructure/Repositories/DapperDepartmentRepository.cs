@@ -1,4 +1,4 @@
-using System.Data;
+/*using System.Data;
 using DirectoryService.Application;
 using DirectoryService.Domain;
 using Dapper;
@@ -68,4 +68,14 @@ public class DapperDepartmentRepository : IDepartmentRepository
             throw new InvalidOperationException("Не удалось сохранить подразделение и его связи в базе данных через Dapper.", ex);
         }
     }
+
+    public async Task<Guid> UpdateAsync(Department department, CancellationToken ct = default)
+    {
+        
+    }
+    public async Task<Guid> DeleteAsync(Guid id, CancellationToken ct = default)
+    {
+        
+    }
 }
+*/

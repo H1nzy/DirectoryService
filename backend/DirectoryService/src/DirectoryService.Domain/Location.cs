@@ -1,9 +1,9 @@
 namespace DirectoryService.Domain;
 public class Location
 {
-     public Guid Id {get;}
-     public string Name{get; private set;} = default!;
-     public string Address {get; private set;} = default!;
+     public Guid Id {get; private set;}
+     public string Name{get; private set;}
+     public string Address {get; private set;}
 
     public DateTime CreatedAt {get; private set;}
     public DateTime UpdatedAt {get; private set;}
@@ -17,8 +17,14 @@ public class Location
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;    
     }
-
-    private Location(){}
+    private Location(Guid id, string name, string address, DateTime createdAt, DateTime updatedAt)
+    {
+        Id = id;
+        Name = name;
+        Address = address;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
 
     public static Location Create(string name, string address)
     {
@@ -30,6 +36,19 @@ public class Location
         }
         Location location = new Location(name, address);
         return location;
+    }
+
+    public void Update(string name, string address)
+    {
+        if (string.IsNullOrWhiteSpace(name)) {
+        throw new ArgumentException("Имя не может быть пустым", nameof(name));
+        }
+        if (string.IsNullOrWhiteSpace(address)) {
+        throw new ArgumentException("Адрес не может быть пустым", nameof(address));
+        }
+        this.Name = name;
+        this.Address = address;
+        this.UpdatedAt = DateTime.UtcNow;
     }
 
 }

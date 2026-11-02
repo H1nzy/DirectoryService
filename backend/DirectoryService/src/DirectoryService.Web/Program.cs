@@ -17,15 +17,25 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddScoped<CreateLocationUseCase>();
 builder.Services.AddScoped<CreateLocationValidator>();
+builder.Services.AddScoped<UpdateLocationValidator>();
 builder.Services.AddScoped<CreateDepartmentUseCase>();
 builder.Services.AddScoped<CreateDepartmentValidator>();
+builder.Services.AddScoped<UpdateDepartmentUseCase>();
+builder.Services.AddScoped<UpdateLocationUseCase>();
+builder.Services.AddScoped<IDepartmentLocationRepository, EFDepartmentLocationRepository>();
+builder.Services.AddScoped<LinkLocationUseCase>();
+builder.Services.AddScoped<UnLinkLocationUseCase>();
+builder.Services.AddScoped<UpdateDepartmentValidator>();
 
 string repositoryType = "EF";
 if (repositoryType == "EF")
 {
     builder.Services.AddScoped<ILocationRepository, EFLocationsRepository>();
     builder.Services.AddScoped<IDepartmentRepository, EFDepartmentsRepository>();
+
+    
 }
+/*
 else if (repositoryType == "Dapper")
 {
      SqlMapper.AddTypeHandler(new DepartmentSlugTypeHandler());
@@ -34,6 +44,7 @@ else if (repositoryType == "Dapper")
     builder.Services.AddScoped<ILocationRepository, DapperLocationRepository>();
     builder.Services.AddScoped<IDepartmentRepository, DapperDepartmentRepository>();
 }
+*/
 
 
 WebApplication app = builder.Build();

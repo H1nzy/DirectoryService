@@ -1,8 +1,10 @@
+/*
 using System.Data;
 using DirectoryService.Application;
 using DirectoryService.Domain;
 using Dapper;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 namespace DirectoryService.Infrastructure;
 public class DapperLocationRepository : ILocationRepository
@@ -38,4 +40,22 @@ public class DapperLocationRepository : ILocationRepository
         var command = new CommandDefinition(sql, new {Name = name}, cancellationToken: ct);
         return await _connection.QueryFirstOrDefaultAsync<bool>(command);
     }
+
+    public async Task<Location?> GetByIdAsync(Guid id, CancellationToken ct = default) 
+    {
+        const string sql = "SELECT id, name, address, created_at, updated_at FROM locations WHERE id = @Id LIMIT 1;";
+
+        return await _connection.QueryFirstOrDefaultAsync<Location>(
+            new CommandDefinition(sql, new { Id = id }, cancellationToken: ct));
+    }
+
+    public async Task<bool> ExistsByNameExceptIdAsync(string name, Guid excludeId, CancellationToken ct = default)
+    {
+        const string sql = "SELECT EXISTS(SELECT 1 FROM locations WHERE name = @Name AND id != @Id);";
+        var command = new CommandDefinition(sql, new {Name = name, Id = excludeId}, cancellationToken: ct);
+        return await _connection.QueryFirstOrDefaultAsync<bool>(command);
+    }
+
+    
 }
+*/
