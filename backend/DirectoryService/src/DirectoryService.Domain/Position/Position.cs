@@ -20,7 +20,7 @@ public class Position
     public static Position Create(string name)
     {
          if (string.IsNullOrWhiteSpace(name)) {
-        throw new ArgumentException("Имя не может быть пустым", nameof(name));
+        throw new PositionNameValidationException();
         }
 
         Position position = new Position(name);

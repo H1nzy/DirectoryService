@@ -18,11 +18,11 @@ public class DepartmentPosition
     {
         if(departmentid == Guid.Empty)
         {
-            throw new ArgumentException("Id подразделения не может быть пустым", nameof(departmentid));
+            throw new DepartmentPositionValidationException(positionid);
         }
         if(positionid== Guid.Empty)
         {
-            throw new ArgumentException("Id позиции не может быть пустым", nameof(positionid));
+            throw new DepartmentPositionIdValidationException(departmentid);
         }
         
         DepartmentPosition departmentPosition = new DepartmentPosition(departmentid, positionid);
