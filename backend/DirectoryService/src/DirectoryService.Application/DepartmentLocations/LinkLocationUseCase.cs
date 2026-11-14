@@ -18,19 +18,19 @@ public class LinkLocationUseCase
         var department = await _deprep.GetByIdAsync(departmentId, ct);
         if (department == null)
         {
-            throw new InvalidOperationException("Подразделение не найдено");
+            throw new DepartmentLocationNotFoundRequestException(departmentId);
         }
 
         var location = await _locrep.GetByIdAsync(locationId, ct);
         if (location == null)
         {
-            throw new InvalidOperationException("Локация не найдена");
+            throw new LocationDepartmentNotFoundRequestException(locationId);
         }
 
         var exists = await _deplocrep.ExistsAsync(departmentId, locationId, ct);
         if (exists)
         {
-            throw new InvalidOperationException("Связь уже существует");
+            throw new ExistsConflictRequestException(departmentId, locationId);
         }
 
         var link = DepartmentLocation.Create(departmentId, locationId, false);

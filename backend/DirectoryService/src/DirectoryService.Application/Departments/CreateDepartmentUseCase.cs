@@ -19,7 +19,7 @@ public class CreateDepartmentUseCase
         var validator = await _departmentvalidator.ValidateAsync(createDepartmentDto, ct);
         if (!validator.IsValid)
         {
-            throw new ValidationException(validator.Errors);
+            throw new DepartmentValidationException(validator.ToErrors());
         }
 
         string? parentPath = null;
@@ -30,7 +30,7 @@ public class CreateDepartmentUseCase
 
             if (parentDepartment == null)
             {
-                throw new InvalidOperationException($"Родительское подразделение с ID {createDepartmentDto.ParentId.Value} не найдено.");
+                throw new ParentDepartmentNotFoundRequestException(createDepartmentDto.ParentId.Value);
             }
 
             parentPath = parentDepartment.Path;
@@ -41,7 +41,7 @@ public class CreateDepartmentUseCase
             bool allExist = await _departmentrepository.AllLocationsExistAsync(createDepartmentDto.LocationIds, ct);
             if (!allExist)
             {
-                throw new InvalidOperationException("Одна или несколько указанных локаций не существуют в системе.");
+                throw new LocationsNotFoundRequestException(createDepartmentDto.LocationIds);
             }
 
         }

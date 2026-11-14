@@ -18,19 +18,19 @@ public class UpdateLocationUseCase
         var validationResult = await _validator.ValidateAsync(dto, ct);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+             throw new LocationValidationException(validationResult.ToErrors());
         }
 
         var location = await _locationRepository.GetByIdAsync(id, ct);
         if (location == null)
         {
-            throw new InvalidOperationException("Локация не найдена");
+            throw new LocationNotFoundRequestException(id, dto.Name);
         }
 
         bool isNameOccupied = await _locationRepository.ExistsByNameExceptIdAsync(dto.Name, id, ct);
         if(isNameOccupied)
         {
-            throw new InvalidOperationException($"Location with name '{dto.Name}' already exists.");
+            throw new LocationConflictRequestException(dto.Name);
         }
         location.Update(dto.Name, dto.Address.ToDisplayString());
         await _locationRepository.UpdateAsync(location, ct);

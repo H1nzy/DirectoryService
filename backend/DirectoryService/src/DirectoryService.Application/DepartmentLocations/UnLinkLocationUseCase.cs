@@ -15,7 +15,7 @@ public class UnLinkLocationUseCase
         var exists = await _deplocrep.ExistsAsync(departmentId, locationId, ct);
         if (!exists)
         {
-            throw new InvalidOperationException("Связь не найдена");
+            throw new LinkNotFoundRequestException(departmentId, locationId);
         }
         await _deplocrep.DeleteAsync(departmentId, locationId, ct);
     }
