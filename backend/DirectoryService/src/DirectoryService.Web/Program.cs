@@ -5,6 +5,7 @@ using DirectoryService.Application;
 using System.Data;
 using Npgsql;
 using Dapper;
+using DirectoryService.Web;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -48,7 +49,7 @@ else if (repositoryType == "Dapper")
 
 
 WebApplication app = builder.Build();
-
+app.UseExceptionMiddleware();
 
 app.MapGet("/", () => "DirectoryService is running!");
 
@@ -57,7 +58,6 @@ app.MapGet("/health", () => Results.Ok(new
     status = "healthy",
     timestamp = DateTimeOffset.UtcNow
 }));
-
 
 app.MapControllers();
 

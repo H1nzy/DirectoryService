@@ -21,7 +21,7 @@ public class DepartmentController : ControllerBase
     [HttpPost]
 
     public async Task<IActionResult> Create([FromBody] CreateDepartmentDto createDepartmentDto, CancellationToken ct)
-    {
+    {     
         var department = await _createDepartmentUseCase.CreateAsync(createDepartmentDto, ct);
         Guid id = department.Id;
         return Ok(id);
