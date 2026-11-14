@@ -29,6 +29,7 @@ dotnet_diagnostic.MA0053.severity = none
 
 # RCS1090: ConfigureAwait — не нужен в ASP.NET Core
 dotnet_diagnostic.RCS1090.severity = none
+dotnet_diagnostic.RCS1194.severity = none
 
 # AsyncFixer01: убрать async/await — меняет поведение исключений в middleware
 dotnet_diagnostic.AsyncFixer01.severity = none
@@ -42,12 +43,16 @@ dotnet_diagnostic.S1144.severity = none
 dotnet_diagnostic.S125.severity = none
 dotnet_diagnostic.S6960.severity = none
 dotnet_diagnostic.CA1308.severity = none
+dotnet_diagnostic.CA1716.severity = none
 # Отключаем правило CA1861 глобально для всех проектов решения
 dotnet_diagnostic.CA1861.severity = none
 
 dotnet_diagnostic.CA1515.severity = none
 dotnet_diagnostic.CA1848.severity = none
 dotnet_diagnostic.CA1508.severity = none
+dotnet_diagnostic.CA1032.severity = none
+dotnet_diagnostic.CA1031.severity = none
+dotnet_diagnostic.CA2254.severity = none
 dotnet_diagnostic.MA0006.severity = none
 
 

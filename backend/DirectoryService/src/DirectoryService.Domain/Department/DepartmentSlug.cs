@@ -14,16 +14,17 @@ public  sealed partial record DepartmentSlug
 
      public static DepartmentSlug Create(string value)
     {
+         if (string.IsNullOrWhiteSpace(value))
+         {
+             throw new SlugValidationException();
+        }
         string normalized = value.Trim().ToLowerInvariant();
             if (normalized.Length < MinLength || normalized.Length > MaxLength){
-            throw new ArgumentException(
-                $"slug (от {MinLength} до {MaxLength} символов)", nameof(value));
+            throw new DepartmentSlugValidationException(normalized);
             }
 
         if (!SlugPattern().IsMatch(normalized)){
-            throw new ArgumentException(
-                "slug (только строчные латинские буквы, цифры и дефисы, " +
-                "не начинается и не заканчивается дефисом)", nameof(value));
+            throw new DepartmentSlugValidationException(normalized);
         }
 
         return new DepartmentSlug(normalized);

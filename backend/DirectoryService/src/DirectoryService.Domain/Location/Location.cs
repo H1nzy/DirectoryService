@@ -29,10 +29,10 @@ public class Location
     public static Location Create(string name, string address)
     {
         if (string.IsNullOrWhiteSpace(name)) {
-        throw new ArgumentException("Имя не может быть пустым", nameof(name));
+        throw new LocationNameValidationException(address);
         }
         if (string.IsNullOrWhiteSpace(address)) {
-        throw new ArgumentException("Адрес не может быть пустым", nameof(address));
+        throw new LocationAddressValidationException(name);
         }
         Location location = new Location(name, address);
         return location;
@@ -41,10 +41,10 @@ public class Location
     public void Update(string name, string address)
     {
         if (string.IsNullOrWhiteSpace(name)) {
-        throw new ArgumentException("Имя не может быть пустым", nameof(name));
+        throw new LocationNameValidationException(address);
         }
         if (string.IsNullOrWhiteSpace(address)) {
-        throw new ArgumentException("Адрес не может быть пустым", nameof(address));
+        throw new LocationAddressValidationException(name);
         }
         this.Name = name;
         this.Address = address;

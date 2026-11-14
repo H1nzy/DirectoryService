@@ -21,11 +21,11 @@ public class DepartmentLocation
     {
         if(departmentid == Guid.Empty)
         {
-            throw new ArgumentException("Id подразделения не может быть пустым", nameof(departmentid));
+            throw new DepartmentLocationValidationException(locationid);
         }
         if(locationid== Guid.Empty)
         {
-            throw new ArgumentException("Id места не может быть пустым", nameof(locationid));
+            throw new DepartmentLocationIdValidationException(departmentid);
         }
         
         DepartmentLocation departmentLocation = new DepartmentLocation(departmentid, locationid, isprimary);

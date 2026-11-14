@@ -1,5 +1,6 @@
 using DirectoryService.Contracts;
 using FluentValidation;
+using Shared;
 namespace DirectoryService.Application;
  public class CreateLocationUseCase
 {
@@ -15,13 +16,13 @@ namespace DirectoryService.Application;
         var validationResult = await _validator.ValidateAsync(createLocationDto, ct);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new LocationValidationException(validationResult.ToErrors());
         }
 
         bool isNameOccupied = await _locationRepository.CheckName(createLocationDto.Name, ct);
         if(isNameOccupied)
         {
-            throw new InvalidOperationException($"Location with name '{createLocationDto.Name}' already exists.");
+            throw new LocationConflictRequestException(createLocationDto.Name);
         }
 
         var  location = DirectoryService.Domain.Location.Create(createLocationDto.Name, createLocationDto.Address.ToDisplayString());

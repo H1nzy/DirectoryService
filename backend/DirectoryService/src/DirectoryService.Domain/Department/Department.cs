@@ -36,16 +36,16 @@ public class Department
     {
         if (slug == null)
         {
-            throw new ArgumentException("Slug Обязателен для заполнения", nameof(slug));
+            throw new SlugValidationException();
         }
         
         if (parentId != null && string.IsNullOrWhiteSpace(parentPath))
         {
-            throw new ArgumentException("Путь родительского подразделения обязателен", nameof(parentPath));
+            throw new DepartmentParentValidationException(parentId.Value);
         }
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new ArgumentException("Имя не может быть пустым", nameof(name));
+            throw new DepartmentValidationException();
         }
 
          string finalPath = parentId == null 
@@ -60,11 +60,11 @@ public class Department
     {
         if(string.IsNullOrWhiteSpace(name))
         {
-            throw new ArgumentException("Name обязателен к заполнению.", nameof(name));
+            throw new DepartmentValidationException();
         }
         if(slug == null)
         {
-            throw new ArgumentException("Slug обязателен к заполнению",nameof(slug));
+            throw new SlugValidationException();
         }
 
         this.Name = name;

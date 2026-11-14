@@ -62,4 +62,9 @@ public class EFDepartmentsRepository : IDepartmentRepository
         }
         return department.Id;
     }
+
+    public async Task<bool> ExistsBySlugExceptIdAsync(string slug, Guid excludeId, CancellationToken ct = default)
+    {
+        return await _dbContext.Departments.AnyAsync(x => x.Slug.Value == slug && x.Id != excludeId, ct);
+    }
 }

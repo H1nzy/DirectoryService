@@ -18,13 +18,18 @@ public class UpdateDepartmentUseCase
         var validator = await _validator.ValidateAsync(dto, ct);
         if (!validator.IsValid)
         {
-            throw new ValidationException(validator.Errors);
+            throw new DepartmentValidationException(validator.ToErrors());
         }
 
         var department = await _departmentRepository.GetByIdAsync(id, ct);
         if(department == null)
         {
-            throw new InvalidOperationException("Подразделение не найдено.");
+            throw new DepartmentNotFoundRequestException(id, dto.Name);
+        }
+        bool isSlugOccupied = await _departmentRepository.ExistsBySlugExceptIdAsync(dto.Slug, id, ct);
+        if (isSlugOccupied)
+        {
+            throw new DepartmentSlugConflictRequestException(dto.Slug, id);
         }
         var slug = DepartmentSlug.Create(dto.Slug);
         department.Update(dto.Name, slug);
