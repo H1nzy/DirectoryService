@@ -2,7 +2,7 @@ using Shared;
 namespace DirectoryService.Application;
 public  class DepartmentValidationException : BadRequestException
 {
-    public DepartmentValidationException(Errors[] errors): base(errors)
+    public DepartmentValidationException(Failure errors): base(errors)
     {
         
     }

@@ -3,7 +3,7 @@ using Shared;
 
 public class DepartmentLocationNotFoundRequestException : NotFoundRequestException
 {
-    public DepartmentLocationNotFoundRequestException(Guid departmentId) : base([DepartmentLocationErrors.DepartmentLocationNotFound(departmentId)])
+    public DepartmentLocationNotFoundRequestException(Guid departmentId) : base(DepartmentLocationErrors.DepartmentLocationNotFound(departmentId))
     {
         
     }
@@ -11,7 +11,7 @@ public class DepartmentLocationNotFoundRequestException : NotFoundRequestExcepti
 
 public class LocationDepartmentNotFoundRequestException : NotFoundRequestException
 {
-    public LocationDepartmentNotFoundRequestException(Guid locationId) : base([DepartmentLocationErrors.LocationDepartmentNotFound(locationId)])
+    public LocationDepartmentNotFoundRequestException(Guid locationId) : base(DepartmentLocationErrors.LocationDepartmentNotFound(locationId))
     {
         
     }
@@ -19,7 +19,7 @@ public class LocationDepartmentNotFoundRequestException : NotFoundRequestExcepti
 
 public class ExistsConflictRequestException : ConflictRequestException
 {
-    public ExistsConflictRequestException(Guid departmentId, Guid locationId) : base([DepartmentLocationErrors.ExistsConflictRequestException(departmentId, locationId)])
+    public ExistsConflictRequestException(Guid departmentId, Guid locationId) : base(DepartmentLocationErrors.ExistsConflictRequestException(departmentId, locationId))
     {
         
     }
@@ -27,7 +27,7 @@ public class ExistsConflictRequestException : ConflictRequestException
 
 public class LinkNotFoundRequestException : NotFoundRequestException
 {
-    public LinkNotFoundRequestException(Guid departmentId, Guid locationId) : base([DepartmentLocationErrors.LinkNotFoundRequestException(departmentId, locationId)])
+    public LinkNotFoundRequestException(Guid departmentId, Guid locationId) : base(DepartmentLocationErrors.LinkNotFoundRequestException(departmentId, locationId))
     {
         
     }

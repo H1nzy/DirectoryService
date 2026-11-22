@@ -1,31 +1,38 @@
+using CSharpFunctionalExtensions;
+using Shared;
+
 namespace DirectoryService.Domain;
+
 public class DepartmentPosition
 {
-    public Guid Id {get;}
-    public Guid DepartmentId {get; private set;}
-    public Guid PositionId {get; private set;}
+    public Guid Id { get; }
+    public Guid DepartmentId { get; private set; }
+    public Guid PositionId { get; private set; }
 
-    private DepartmentPosition(Guid departmentid, Guid positionid)
+    private DepartmentPosition(Guid departmentId, Guid positionId)
     {
-        DepartmentId = departmentid;
-        PositionId = positionid;
+        DepartmentId = departmentId;
+        PositionId = positionId;
         Id = Guid.CreateVersion7();
     }
 
-    private DepartmentPosition(){}
+    private DepartmentPosition() { }
 
-    public static DepartmentPosition Create(Guid departmentid, Guid positionid)
+    public static Result<DepartmentPosition, Failure> Create(Guid departmentId, Guid positionId)
     {
-        if(departmentid == Guid.Empty)
-        {
-            throw new DepartmentPositionValidationException(positionid);
-        }
-        if(positionid== Guid.Empty)
-        {
-            throw new DepartmentPositionIdValidationException(departmentid);
-        }
-        
-        DepartmentPosition departmentPosition = new DepartmentPosition(departmentid, positionid);
-        return departmentPosition;
-    }    
+        if (departmentId == Guid.Empty)
+            return Errors.Validation(
+                "department.position.department.id.is.empty",
+                "Id подразделения не может быть пустым",
+                nameof(DepartmentId)).ToFailure();
+
+        if (positionId == Guid.Empty)
+            return Errors.Validation(
+                "department.position.position.id.is.empty",
+                "Id должности не может быть пустым",
+                nameof(PositionId)).ToFailure();
+
+        return Result.Success<DepartmentPosition, Failure>(
+            new DepartmentPosition(departmentId, positionId));
+    }
 }

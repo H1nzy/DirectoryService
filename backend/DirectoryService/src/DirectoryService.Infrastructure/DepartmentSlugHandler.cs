@@ -14,7 +14,10 @@ public class DepartmentSlugHandler : SqlMapper.TypeHandler<DepartmentSlug>
                 $"Не удалось преобразовать значение типа {value?.GetType().Name ?? "null"} в DepartmentSlug");
         }
 
-        return DepartmentSlug.Create(stringValue);
+        var result = DepartmentSlug.Create(stringValue);
+        if (result.IsFailure)
+            throw new DataException($"В БД невалидный slug '{stringValue}': {result.Error}");
+        return result.Value;
     }
 
     public override void SetValue(IDbDataParameter parameter, DepartmentSlug? value)
@@ -25,6 +28,6 @@ public class DepartmentSlugHandler : SqlMapper.TypeHandler<DepartmentSlug>
             return;
         }
 
-        parameter.Value = value.Value; 
+        parameter.Value = value.Value;
     }
 }

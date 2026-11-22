@@ -6,18 +6,24 @@ namespace DirectoryService.Infrastructure;
 
 public class DepartmentSlugTypeHandler : SqlMapper.TypeHandler<DepartmentSlug>
 {
-    // Как сохранить в базу данных: берем чистую строку из свойства Value
     public override void SetValue(IDbDataParameter parameter, DepartmentSlug? value)
     {
         parameter.Value = value is null ? DBNull.Value : value.Value;
     }
 
-    // Как прочитать из базы данных: берем строку и передаем в метод Create
     public override DepartmentSlug? Parse(object value)
     {
-        if (value is null || value is DBNull) 
+        if (value is null || value is DBNull)
             return null;
 
-        return DepartmentSlug.Create(value.ToString()!);
+        var stringValue = value as string ?? value.ToString()!;
+        var result = DepartmentSlug.Create(stringValue);
+        if (result.IsFailure)
+        {
+            throw new DataException(
+                $"В БД невалидный slug '{stringValue}': {result.Error}");
+        }
+
+        return result.Value;
     }
 }

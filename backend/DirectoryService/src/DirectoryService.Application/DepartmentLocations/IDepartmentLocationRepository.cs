@@ -1,9 +1,10 @@
 namespace DirectoryService.Application;
 using DirectoryService.Domain;
+using Shared;
+using CSharpFunctionalExtensions;
 public interface IDepartmentLocationRepository
 {
-    Task<bool> ExistsAsync(Guid departmentId, Guid locationId, CancellationToken ct = default);
-    Task<Guid> AddAsync(DepartmentLocation link, CancellationToken ct = default);
-
-    Task DeleteAsync(Guid departmentId, Guid locationId, CancellationToken ct = default);
+    Task<Result<bool, Failure>> ExistsAsync(Guid departmentId, Guid locationId, CancellationToken ct = default);
+    Task<Result<Guid, Failure>> AddAsync(DepartmentLocation link, CancellationToken ct = default);
+    Task<Result<bool, Failure>> DeleteAsync(Guid departmentId, Guid locationId, CancellationToken ct = default);
 }

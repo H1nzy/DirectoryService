@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 public record Errors
 {
+    public static Errors None { get; } = new Errors(string.Empty, string.Empty, ErrorType.NONE, null);
     public string Code {get; }
     public string Message {get; }
     public ErrorType Type {get; }
@@ -25,11 +26,14 @@ public record Errors
         => new(code ??"value.is.conflict", message, ErrorType.CONFLICT);
     public static Errors Failure(string? code, string message)
         => new(code ?? "failure", message, ErrorType.FAILURE);
+
+     public Failure ToFailure() => this;
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ErrorType
 {
+    NONE,
     VALIDATION,
     NOTFOUND,
     FAILURE,

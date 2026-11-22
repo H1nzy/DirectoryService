@@ -4,7 +4,7 @@ using Shared;
 namespace DirectoryService.Domain;
 public class NotFoundException : Exception
 {
-    public NotFoundException(Errors[] errors) : base(JsonSerializer.Serialize(errors))
+    public NotFoundException(Failure errors) : base(JsonSerializer.Serialize(errors))
     {
 
     }

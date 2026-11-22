@@ -20,8 +20,8 @@ public class LocationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateLocationDto createLocationDto, CancellationToken ct)
     {
-        Guid id = await _createLocationUseCase.Create(createLocationDto, ct);
-        return Ok(id);
+        var result = await _createLocationUseCase.Create(createLocationDto, ct);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -39,8 +39,8 @@ public class LocationController : ControllerBase
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody]UpdateLocationDto updateLocationDto, CancellationToken ct)
     {
-         await _updateLocationUseCase.Handle(id, updateLocationDto, ct);
-        return Ok(id);
+         var result = await _updateLocationUseCase.Handle(id, updateLocationDto, ct);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]

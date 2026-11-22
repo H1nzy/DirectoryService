@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using DirectoryService.Application;
 
 namespace DirectoryService.Web;
-using DirectoryService.Application;
 
 [ApiController]
 [Route("departments")]
@@ -24,8 +24,8 @@ public sealed class DepartmentLocationController : ControllerBase
         [FromRoute] Guid locationId,
         CancellationToken ct)
     {
-        var id = await _linkLocationUseCase.Create(departmentId, locationId, ct);
-        return Ok(id);
+        var result = await _linkLocationUseCase.Create(departmentId, locationId, ct);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpDelete("{departmentId:guid}/locations/{locationId:guid}")]
@@ -34,7 +34,7 @@ public sealed class DepartmentLocationController : ControllerBase
         [FromRoute] Guid locationId,
         CancellationToken ct)
     {
-        await _unLinkLocationUseCase.Delete(departmentId, locationId, ct);
-        return NoContent();
+        var result = await _unLinkLocationUseCase.Delete(departmentId, locationId, ct);
+        return result.IsFailure ? result.Error.ToResponse() : NoContent();
     }
 }

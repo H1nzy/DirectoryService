@@ -2,7 +2,7 @@ namespace DirectoryService.Domain;
 using Shared;
  public class DepartmentValidationException : BadException
 {
-    public DepartmentValidationException(): base([DepartmentErrors.Department.ValidationException()])
+    public DepartmentValidationException(): base(DepartmentErrors.Department.ValidationException())
     {
         
     }
@@ -10,7 +10,7 @@ using Shared;
 
 public class SlugValidationException : BadException
 {
-    public SlugValidationException(): base([DepartmentErrors.Slug.ValidationException()])
+    public SlugValidationException(): base(DepartmentErrors.Slug.ValidationException())
     {
         
     }
@@ -18,7 +18,7 @@ public class SlugValidationException : BadException
 
 public class DepartmentParentValidationException : BadException
 {
-    public DepartmentParentValidationException(Guid id): base([DepartmentErrors.DepartmentParent.ValidationException(id)])
+    public DepartmentParentValidationException(Guid id): base(DepartmentErrors.DepartmentParent.ValidationException(id))
     {
         
     }

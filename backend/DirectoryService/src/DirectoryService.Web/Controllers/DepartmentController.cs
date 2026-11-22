@@ -22,9 +22,8 @@ public class DepartmentController : ControllerBase
 
     public async Task<IActionResult> Create([FromBody] CreateDepartmentDto createDepartmentDto, CancellationToken ct)
     {     
-        var department = await _createDepartmentUseCase.CreateAsync(createDepartmentDto, ct);
-        Guid id = department.Id;
-        return Ok(id);
+        var result = await _createDepartmentUseCase.CreateAsync(createDepartmentDto, ct);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value.Id);
     }
 
     [HttpGet("{id:guid}")]
@@ -42,8 +41,8 @@ public class DepartmentController : ControllerBase
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateDepartmentDto updateDepartmentDto, CancellationToken ct)
     {
-        await _updateDepartmentUseCase.Handle(id, updateDepartmentDto, ct);
-        return Ok(id);
+        var result = await _updateDepartmentUseCase.Handle(id, updateDepartmentDto, ct);
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
