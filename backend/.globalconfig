@@ -55,8 +55,22 @@ dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.CA2254.severity = none
 dotnet_diagnostic.MA0006.severity = none
 
+# Отключает CA1000 (Не объявляйте статические члены в универсальных типах)
+dotnet_diagnostic.CA1000.severity = none
 
+# Отключает CA2225 (Предоставьте метод с именем ToResult или FromErrors...)
+dotnet_diagnostic.CA2225.severity = none
 
+# Отключает CA2201 (Do not raise System.ApplicationException type)
+dotnet_diagnostic.CA2201.severity = none
+
+# Отключает CA1065 (get_Value создает исключение типа ApplicationException...)
+dotnet_diagnostic.CA1065.severity = none
+
+dotnet_diagnostic.MA0014.severity = none
+dotnet_diagnostic.S112.severity = none
+dotnet_diagnostic.CA1002.severity = none
+dotnet_diagnostic.S1186.severity = none
 # Правила строже, чем по умолчанию:
 dotnet_diagnostic.S1125.severity = error  # Redundant Boolean literal
 dotnet_diagnostic.S6673.severity = error  # Serilog template placeholder order

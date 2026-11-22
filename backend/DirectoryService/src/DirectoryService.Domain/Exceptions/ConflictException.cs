@@ -3,7 +3,7 @@ using Shared;
 namespace DirectoryService.Domain;
 public class ConflictException : Exception
 {
-    public ConflictException (Errors[] errors) : base(JsonSerializer.Serialize(errors))
+    public ConflictException (Failure errors) : base(JsonSerializer.Serialize(errors))
     {
         
     }

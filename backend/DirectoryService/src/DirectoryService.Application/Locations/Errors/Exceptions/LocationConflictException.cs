@@ -4,7 +4,7 @@ using Shared;
 namespace DirectoryService.Application;
 public class LocationConflictRequestException : ConflictRequestException
 {
-    public LocationConflictRequestException(string name) : base([LocationErrors.Locations.ConflictRequestException(name)])
+    public LocationConflictRequestException(string name) : base(LocationErrors.Locations.LocationConflictRequestException(name))
     {
         
     }

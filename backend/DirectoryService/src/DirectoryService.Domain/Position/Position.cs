@@ -1,10 +1,14 @@
+using CSharpFunctionalExtensions;
+using Shared;
+
 namespace DirectoryService.Domain;
+
 public class Position
 {
-    public Guid Id {get;}
-    public string Name{get; private set;} = default!;
-    public DateTime CreatedAt {get; private set;}
-    public DateTime UpdatedAt {get; private set;}
+    public Guid Id { get; }
+    public string Name { get; private set; } = default!;
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
 
     private Position(string name)
     {
@@ -15,16 +19,16 @@ public class Position
         UpdatedAt = DateTime.UtcNow;
     }
 
-    private Position(){}
+    private Position() { }
 
-    public static Position Create(string name)
+    public static Result<Position, Failure> Create(string? name)
     {
-         if (string.IsNullOrWhiteSpace(name)) {
-        throw new PositionNameValidationException();
-        }
+        if (string.IsNullOrWhiteSpace(name))
+            return Errors.Validation(
+                "position.name.is.empty",
+                "Имя должности не может быть пустым",
+                nameof(Name)).ToFailure();
 
-        Position position = new Position(name);
-        return position;
+        return Result.Success<Position, Failure>(new Position(name));
     }
-
 }

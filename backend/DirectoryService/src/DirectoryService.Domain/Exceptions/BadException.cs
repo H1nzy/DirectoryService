@@ -5,7 +5,7 @@ namespace DirectoryService.Domain;
 
 public class BadException : Exception 
 {
-    public BadException(Errors[] errors) : base(JsonSerializer.Serialize(errors))
+    public BadException(Failure errors) : base(JsonSerializer.Serialize(errors))
     {
         
     }
