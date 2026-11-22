@@ -26,6 +26,7 @@ public class EFDepartmentLocationRepository : IDepartmentLocationRepository
                 .AnyAsync(x => x.DepartmentId == departmentId && x.LocationId == locationId, ct);
             return Result.Success<bool, Failure>(exists);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка проверки связи {DepartmentId}/{LocationId}", departmentId, locationId);
@@ -41,6 +42,7 @@ public class EFDepartmentLocationRepository : IDepartmentLocationRepository
             await _dbContext.SaveChangesAsync(ct);
             return Result.Success<Guid, Failure>(link.Id);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка при сохранении связи подразделения с локацией {DepartmentLocationId}", link.Id);
@@ -58,6 +60,7 @@ public class EFDepartmentLocationRepository : IDepartmentLocationRepository
 
             return Result.Success<bool, Failure>(deleted > 0);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка удаления связи {DepartmentId}/{LocationId}", departmentId, locationId);

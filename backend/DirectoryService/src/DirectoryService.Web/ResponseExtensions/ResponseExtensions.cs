@@ -11,7 +11,6 @@ public static class ResponseExt
             return new ObjectResult(null)
             {
                 StatusCode = StatusCodes.Status500InternalServerError,
-
             };
         }
 
@@ -19,24 +18,20 @@ public static class ResponseExt
             .Select(x => x.Type)
             .Distinct()
             .ToList();
-        
-        int statusCode = distinctErrorTypes.Count > 1
-            ? StatusCodes.Status500InternalServerError
-            : GetStatusCodeFromErrorType(distinctErrorTypes[0]);
+
+        int statusCode;
+        if (distinctErrorTypes.Contains(ErrorType.VALIDATION))
+            statusCode = StatusCodes.Status400BadRequest;
+        else if (distinctErrorTypes.Contains(ErrorType.NOTFOUND))
+            statusCode = StatusCodes.Status404NotFound;
+        else if (distinctErrorTypes.Contains(ErrorType.CONFLICT))
+            statusCode = StatusCodes.Status409Conflict;
+        else
+            statusCode = StatusCodes.Status500InternalServerError;
 
         return new ObjectResult(failure)
         {
             StatusCode = statusCode,
         };
     }
-
-    private static int GetStatusCodeFromErrorType(ErrorType errorType) =>
-        errorType switch
-        {
-            ErrorType.VALIDATION => StatusCodes.Status400BadRequest,
-            ErrorType.NOTFOUND => StatusCodes.Status404NotFound,
-            ErrorType.CONFLICT => StatusCodes.Status409Conflict,
-            ErrorType.FAILURE => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status500InternalServerError
-        };
 }

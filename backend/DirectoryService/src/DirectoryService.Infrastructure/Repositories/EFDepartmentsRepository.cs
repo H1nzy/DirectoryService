@@ -27,6 +27,7 @@ public class EFDepartmentsRepository : IDepartmentRepository
                 return Errors.NotFound(null, $"Подразделение {id} не найдено").ToFailure();
             return Result.Success<Department, Failure>(department);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка чтения подразделения {DepartmentId}", id);
@@ -44,6 +45,7 @@ public class EFDepartmentsRepository : IDepartmentRepository
 
             return Result.Success<bool, Failure>(result == locationIds.Count);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка проверки локаций {LocationIds}", locationIds);
@@ -62,6 +64,7 @@ public class EFDepartmentsRepository : IDepartmentRepository
             await transaction.CommitAsync(ct);
             return UnitResult.Success<Failure>();
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             try { await transaction.RollbackAsync(ct); }
@@ -80,6 +83,7 @@ public class EFDepartmentsRepository : IDepartmentRepository
             await _dbContext.SaveChangesAsync(ct);
             return Result.Success<Guid, Failure>(department.Id);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка обновления подразделения {DepartmentId} через EF Core", department.Id);
@@ -87,23 +91,25 @@ public class EFDepartmentsRepository : IDepartmentRepository
         }
     }
 
-    public async Task<Result<bool, Failure>> ExistsBySlugExceptIdAsync(string slug, Guid excludeId, CancellationToken ct = default)
+   public async Task<Result<bool, Failure>> ExistsBySlugExceptIdAsync(string slug, Guid excludeId, CancellationToken ct = default)
+{
+    try
     {
-        try
-        {
-            var slugResult = DepartmentSlug.Create(slug);
-            if (slugResult.IsFailure)
-                return slugResult.Error;   // 400 VALIDATION, а не 500
+        var slugResult = DepartmentSlug.Create(slug);
+        if (slugResult.IsFailure)
+            return slugResult.Error;
 
-            var exists = await _dbContext.Departments
-                .AnyAsync(x => x.Slug == slugResult.Value && x.Id != excludeId, ct);
+        // Сравниваем сам объект-значение, не вызывая .Value
+        var exists = await _dbContext.Departments
+            .AnyAsync(x => x.Slug == slugResult.Value && x.Id != excludeId, ct);
 
-            return Result.Success<bool, Failure>(exists);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ошибка проверки slug {Slug} (excludeId={ExcludeId})", slug, excludeId);
-            return Errors.Failure(null, "Не удалось проверить slug").ToFailure();
-        }
+        return Result.Success<bool, Failure>(exists);
     }
+    catch (OperationCanceledException) { throw; }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Ошибка проверки slug {Slug} (excludeId={ExcludeId})", slug, excludeId);
+        return Errors.Failure(null, "Не удалось проверить slug").ToFailure();
+    }
+}
 }

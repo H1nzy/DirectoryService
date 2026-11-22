@@ -26,6 +26,7 @@ public class EFLocationsRepository : ILocationRepository
             await _dbContext.SaveChangesAsync(ct);
             return Result.Success<Guid, Failure>(location.Id);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка при сохранении локации {LocationId} через EF Core", location.Id);
@@ -42,6 +43,7 @@ public class EFLocationsRepository : ILocationRepository
                 return Errors.NotFound(null, $"Локация {id} не найдена").ToFailure();
             return Result.Success<Location, Failure>(location);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка чтения локации {LocationId}", id);
@@ -56,6 +58,7 @@ public class EFLocationsRepository : ILocationRepository
             var exists = await _dbContext.Locations.AnyAsync(x => x.Name == name, ct);
             return Result.Success<bool, Failure>(exists);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка проверки имени локации {Name}", name);
@@ -70,6 +73,7 @@ public class EFLocationsRepository : ILocationRepository
             var exists = await _dbContext.Locations.AnyAsync(x => x.Name == name && x.Id != excludeId, ct);
             return Result.Success<bool, Failure>(exists);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка проверки имени локации {Name} (excludeId={ExcludeId})", name, excludeId);
@@ -85,6 +89,7 @@ public class EFLocationsRepository : ILocationRepository
             await _dbContext.SaveChangesAsync(ct);
             return Result.Success<Guid, Failure>(location.Id);
         }
+        catch (OperationCanceledException) { throw; }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ошибка обновления локации {LocationId} через EF Core", location.Id);
